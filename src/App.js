@@ -11,6 +11,7 @@ const App = () => {
   const [value, setValue] = useState("");
   const [busqueda, setBusqueda] = useState("");
   const [item, setItem] = useState("");
+  const [rutaInicial, setRuta] = useState('sites/MLA/search?q=');
 
   const handleChange = (e) => {
     setValue(e.target.value);
@@ -23,23 +24,27 @@ const App = () => {
 
   const verDetalleProducto = (id) => {
     setItem(id);
+    console.log("soy el clic que viene de la tarjeta")
+    setBusqueda(`${item}`)
+    setRuta('items/')
   };
+ 
 
   useEffect(() => {
-    fetch(`https://api.mercadolibre.com/sites/MLA/search?q=${busqueda}`)
+    fetch(`https://api.mercadolibre.com/${rutaInicial}${busqueda}`)
       .then((res) => res.json())
       .then((data) => {
         setProductos(data.results);
       });
-  }, [busqueda]);
+  }, [busqueda, item]);
 
-  useEffect(() => {
-    fetch(`https://api.mercadolibre.com/items/${item}`)
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data)
-      });
-  }, [item]);
+  // useEffect(() => {
+  //   fetch(`https://api.mercadolibre.com/${rutaInicial}${item}`)
+  //     .then((res) => res.json())
+  //     .then((data) => {
+  //       console.log(data)
+  //     });
+  // }, [item, busqueda]);
 
   return (
     <div>
