@@ -1,13 +1,26 @@
 import "./app.scss";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTruck } from '@fortawesome/free-solid-svg-icons'
 
-const Tarjeta = ({ precio, titulo, foto }) => {
+const Tarjeta = ({ id, precio, titulo, foto, envio, verDetalleProducto}) => {
+
+const envioGratis = envio.free_shipping
+
+const ver = () => {
+  verDetalleProducto(id)
+}
+
+
+
   return (
     <>
       <div className="contenedor-tarjeta">
         <div className="imagen-producto">
         <img src={foto}></img>
         </div>
-      
+        <div className="envio-producto">
+        {envioGratis && <FontAwesomeIcon className="camioncito" icon={faTruck}/>}
+        </div>
         <div className="precio-producto">
         <p>$ {precio}</p>
         </div>
@@ -15,7 +28,7 @@ const Tarjeta = ({ precio, titulo, foto }) => {
           <p>{titulo}</p>
         </div>
         <div className="ver-detalle-producto">
-          <button>
+          <button onClick={ver}>
             <p>VER MAS</p>
           </button>
         </div>

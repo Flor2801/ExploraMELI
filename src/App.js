@@ -10,13 +10,19 @@ const App = () => {
   const [productos, setProductos] = useState([]);
   const [value, setValue] = useState("");
   const [busqueda, setBusqueda] = useState("");
+  const [item, setItem] = useState("");
 
   const handleChange = (e) => {
     setValue(e.target.value);
   };
 
-  const handleClick = () => {
+  const handleClick = (e) => {
+    e.preventDefault();
     setBusqueda(value);
+  };
+
+  const verDetalleProducto = (id) => {
+    setItem(id);
   };
 
   useEffect(() => {
@@ -24,11 +30,16 @@ const App = () => {
       .then((res) => res.json())
       .then((data) => {
         setProductos(data.results);
-        console.log(productos);
       });
   }, [busqueda]);
 
-
+  useEffect(() => {
+    fetch(`https://api.mercadolibre.com/items/${item}`)
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data)
+      });
+  }, [item]);
 
   return (
     <div>
@@ -60,32 +71,29 @@ const App = () => {
         </div>
 
         <div className="main">
-        <div className="contenedor-filtros">
-          
-          <div className="filtros">
-            <p>FILTROS</p>
-            <p>Envío Gratis</p>
-            <p>Ordenar por mayor valor</p>
-            <p>Ordenar por menor valor</p>
-            <p>Por Localidad</p>
-            <p>Tiendas Oficiales</p>
-
-          
+          <div className="contenedor-filtros">
+            <div className="filtros">
+              <p>FILTROS</p>
+              <p>Envío Gratis</p>
+              <p>Ordenar por mayor valor</p>
+              <p>Ordenar por menor valor</p>
+              <p>Por Localidad</p>
+              <p>Tiendas Oficiales</p>
+            </div>
           </div>
-
-
-        </div>
           <div className="resultados">
             {productos.map((producto) => (
               <Tarjeta
+                key={producto.id}
+                id={producto.id}
                 precio={producto.price}
                 titulo={producto.title}
                 foto={producto.thumbnail}
+                envio={producto.shipping}
+                ver={verDetalleProducto}
               />
             ))}
           </div>
-
-        
         </div>
       </div>
     </div>
