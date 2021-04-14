@@ -1,7 +1,8 @@
 import "./index.css";
 import "./app.scss";
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-// import { faSearch } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import { faQuestionCircle } from "@fortawesome/free-solid-svg-icons";
 import logo from "./components/binoculars.png";
 import React, { useState, useEffect } from "react";
 import Tarjeta from "tarjeta.js";
@@ -14,7 +15,7 @@ const App = () => {
   const [busqueda, setBusqueda] = useState("");
   const [item, setItem] = useState("");
   const [rutaInicial, setRuta] = useState("sites/MLA/search?q=");
-  const [detalle, setDetalle] = useState(true);
+  const [detalle, setDetalle] = useState(false);
 
   const handleChange = (e) => {
     setValue(e.target.value);
@@ -23,18 +24,19 @@ const App = () => {
   const handleClick = (e) => {
     e.preventDefault();
     setBusqueda(value);
-    setDetalle(true);
+    setDetalle(false);
+    setRuta("sites/MLA/search?q=");
   };
 
   const verDetalleProductoApp = (id) => {
     setItem(id);
     setBusqueda(id);
     setRuta("items/");
-    setDetalle(false);
+    setDetalle(true);
   };
 
   useEffect(() => {
-    fetch(`https://api.mercadolibre.com/sites/MLA/search?q=${busqueda}`)
+    fetch(`https://api.mercadolibre.com/${rutaInicial}${busqueda}`)
       .then((res) => res.json())
       .then((data) => {
         setProductos(data.results);
@@ -47,9 +49,9 @@ const App = () => {
       <div>
         <div className="barra-busqueda">
           <div className="logo">
-            {" "}
-            <img src={logo}></img>
-            <p>ExploraMELI</p>
+            {/* <img src={logo}></img> */}
+            <p className="explora">Explora</p>
+            <p className="meli">MELI</p>
           </div>
           <div className="input">
             <form>
@@ -69,6 +71,7 @@ const App = () => {
           </div>
           <div className="ayuda">
             <p>Ayuda</p>
+            <FontAwesomeIcon className="help" icon={faQuestionCircle} />
           </div>
         </div>
 
@@ -89,7 +92,7 @@ const App = () => {
             </div>
           </div>
           <div className="resultados">
-            {detalle ? 
+            {productos &&
               productos.map((producto) => (
                 <Tarjeta
                   key={producto.id}
@@ -100,13 +103,15 @@ const App = () => {
                   envio={producto.shipping}
                   ver={verDetalleProductoApp}
                 />
-              ))
-             : 
-            <h4>DETALLE DE LA TARJETA</h4>
-              // <TarjetaUnica titulo={prodUnico.title} />
-            }
+              ))}
+            {detalle && <h4>DETALLE DE LA TARJETA</h4>}
           </div>
+
+
+
         </div>
+
+        <div className="footer"><p>Hecho con REACT por Flor en ADA Itw</p></div>
       </div>
     </div>
   );
