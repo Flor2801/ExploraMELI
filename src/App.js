@@ -5,9 +5,11 @@ import "./app.scss";
 import logo from "./components/binoculars.png";
 import React, { useState, useEffect } from "react";
 import Tarjeta from "tarjeta.js";
+import TarjetaUnica from "tarjetaunica.js";
 
 const App = () => {
   const [productos, setProductos] = useState([]);
+  const [prodUnico, setProdUnico] = useState({});
   const [value, setValue] = useState("");
   const [busqueda, setBusqueda] = useState("");
   const [item, setItem] = useState("");
@@ -21,6 +23,7 @@ const App = () => {
   const handleClick = (e) => {
     e.preventDefault();
     setBusqueda(value);
+    setDetalle(true)
   };
 
   const verDetalleProductoApp = (id) => {
@@ -31,10 +34,12 @@ const App = () => {
   };
 
   useEffect(() => {
-    fetch(`https://api.mercadolibre.com/sites/MLA/search?q=${busqueda}`)
+    fetch(`https://api.mercadolibre.com/${rutaInicial}${busqueda}`)
       .then((res) => res.json())
       .then((data) => {
         setProductos(data.results);
+        setProdUnico(data);
+        console.log(prodUnico)
       });
   }, [busqueda, item]);
 
@@ -85,8 +90,10 @@ const App = () => {
             </div>
           </div>
           <div className="resultados">
-            
-            {productos.map((producto) => (
+
+
+{detalle ? 
+            productos.map((producto) => (
               <Tarjeta
                 key={producto.id}
                 id={producto.id}
@@ -96,7 +103,17 @@ const App = () => {
                 envio={producto.shipping}
                 ver={verDetalleProductoApp}
               />
-            ))}
+            )) 
+            
+
+            :
+
+            <TarjetaUnica
+            titulo={prodUnico.title}
+          />
+
+            }
+            
           </div>
         </div>
       </div>
