@@ -9,12 +9,12 @@ import TarjetaUnica from "tarjetaunica.js";
 
 const App = () => {
   const [productos, setProductos] = useState([]);
-  const [prodUnico, setProdUnico] = useState({});
+  // const [prodUnico, setProdUnico] = useState({});
   const [value, setValue] = useState("");
   const [busqueda, setBusqueda] = useState("");
   const [item, setItem] = useState("");
   const [rutaInicial, setRuta] = useState("sites/MLA/search?q=");
-  const [detalle, setDetalle] = useState(true)
+  const [detalle, setDetalle] = useState(true);
 
   const handleChange = (e) => {
     setValue(e.target.value);
@@ -23,23 +23,22 @@ const App = () => {
   const handleClick = (e) => {
     e.preventDefault();
     setBusqueda(value);
-    setDetalle(true)
+    setDetalle(true);
   };
 
   const verDetalleProductoApp = (id) => {
     setItem(id);
     setBusqueda(id);
     setRuta("items/");
-    setDetalle(false)
+    setDetalle(false);
   };
 
   useEffect(() => {
-    fetch(`https://api.mercadolibre.com/${rutaInicial}${busqueda}`)
+    fetch(`https://api.mercadolibre.com/sites/MLA/search?q=${busqueda}`)
       .then((res) => res.json())
       .then((data) => {
         setProductos(data.results);
-        setProdUnico(data);
-        console.log(prodUnico)
+        // setProdUnico(data);
       });
   }, [busqueda, item]);
 
@@ -77,7 +76,7 @@ const App = () => {
           <div className="contenedor-filtros">
             <div className="filtros">
               <h3>FILTROS</h3>
-              <h5>Envío Gratis</h5> 
+              <h5>Envío Gratis</h5>
               <input type="checkbox"></input>
               <h5>Ordenar por mayor valor</h5>
               <input type="checkbox"></input>
@@ -90,30 +89,22 @@ const App = () => {
             </div>
           </div>
           <div className="resultados">
-
-
-{detalle ? 
-            productos.map((producto) => (
-              <Tarjeta
-                key={producto.id}
-                id={producto.id}
-                precio={producto.price}
-                titulo={producto.title}
-                foto={producto.thumbnail}
-                envio={producto.shipping}
-                ver={verDetalleProductoApp}
-              />
-            )) 
-            
-
-            :
-
-            <TarjetaUnica
-            titulo={prodUnico.title}
-          />
-
+            {detalle ? 
+              productos.map((producto) => (
+                <Tarjeta
+                  key={producto.id}
+                  id={producto.id}
+                  precio={producto.price}
+                  titulo={producto.title}
+                  foto={producto.thumbnail}
+                  envio={producto.shipping}
+                  ver={verDetalleProductoApp}
+                />
+              ))
+             : 
+            <h4>DETALLE DE LA TARJETA</h4>
+              // <TarjetaUnica titulo={prodUnico.title} />
             }
-            
           </div>
         </div>
       </div>
