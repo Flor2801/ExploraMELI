@@ -53,17 +53,23 @@ body {
 
     .filtros {
       margin: 20px;
+      h5{
+        font-weight: 400;
+        margin-bottom: 5px;
+      }
     }
   }
 
   .resultados {
-    width: 70%;
-    margin: 50px;
+    width: 80%;
+    margin: 30px;
+    margin-left: 80px;
     display: flex;
     flex-wrap: wrap;
+   
 
     .contenedor-tarjeta {
-      width: 230px;
+      width: 220px;
       height: 280px;
       background-color: white;
       margin: 10px;
@@ -73,17 +79,25 @@ body {
       flex-direction: column;
       justify-content: center;
       align-items: center;
+
+  
       .envio-producto {
+        position: relative;
       .camioncito {
         color: green;
+        position: relative;
+        left: 70px;
+        top: 30px;
       }
     }
 
       .imagen-producto {
-        width: 100px;
+        width: 130px;
         height: auto;
         margin: 5px;
-        img {
+        overflow: hidden;
+        
+       .foto {
           width: 100%;
           height: auto;
         }
@@ -112,9 +126,20 @@ body {
         button {
           width: 100px;
           height: 20px;
+          background-color: #3483fa;
+          border-radius: 3px;
+          border-style: none;
+          outline-style: none;
+          &:hover{
+            background-color: #0457d3;
+          }
+          &:active{
+            background-color: #0457d3;
+          }
           p {
             margin: 0;
             font-size: 10px;
+            color: white;
           }
         }
       }
