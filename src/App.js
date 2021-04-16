@@ -16,6 +16,7 @@ const App = () => {
   const [item, setItem] = useState("");
   const [rutaInicial, setRuta] = useState("sites/MLA/search?q=");
   const [detalle, setDetalle] = useState(false);
+  const [verEnvio, setVerEnvioGratis] = useState(false)
 
   const handleChange = (e) => {
     setValue(e.target.value);
@@ -43,6 +44,19 @@ const App = () => {
         // setProdUnico(data);
       });
   }, [busqueda, item]);
+
+
+  const prodEnvioGratis = [...productos.filter(producto => producto.shipping === true)]
+  console.log(prodEnvioGratis)
+
+  
+  const verEnvioGratis = () => {
+   setVerEnvioGratis(true)
+   setProductos([])
+   
+  }
+
+
 
   return (
     <div>
@@ -76,11 +90,12 @@ const App = () => {
         </div>
 
         <div className="main">
+        {/* <h3>Resultados</h3> */}
           <div className="contenedor-filtros">
             <div className="filtros">
               <h3>FILTROS</h3>
               <h5>Envío Gratis</h5>
-              <input type="checkbox"></input>
+              <input type="checkbox" onClick={verEnvioGratis}></input>
               <h5>Ordenar por mayor valor</h5>
               <input type="checkbox"></input>
               <h5>Ordenar por menor valor</h5>
@@ -92,6 +107,7 @@ const App = () => {
             </div>
           </div>
           <div className="resultados">
+           
             {productos &&
               productos.map((producto) => (
                 <Tarjeta
@@ -104,7 +120,21 @@ const App = () => {
                   ver={verDetalleProductoApp}
                 />
               ))}
+
             {detalle && <h4>DETALLE DE LA TARJETA</h4>}
+
+            {verEnvio &&
+              prodEnvioGratis.map((producto) => (
+                <Tarjeta
+                  key={producto.id}
+                  id={producto.id}
+                  precio={producto.price}
+                  titulo={producto.title}
+                  foto={producto.thumbnail}
+                  envio={producto.shipping}
+                  ver={verDetalleProductoApp}
+                />
+              ))}
           </div>
 
 
