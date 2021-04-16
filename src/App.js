@@ -16,7 +16,7 @@ const App = () => {
   const [item, setItem] = useState("");
   const [rutaInicial, setRuta] = useState("sites/MLA/search?q=");
   const [detalle, setDetalle] = useState(false);
-  const [verEnvio, setVerEnvioGratis] = useState(false)
+  const [verEnvio, setVerEnvio] = useState(false)
 
   const handleChange = (e) => {
     setValue(e.target.value);
@@ -27,6 +27,7 @@ const App = () => {
     setBusqueda(value);
     setDetalle(false);
     setRuta("sites/MLA/search?q=");
+    setVerEnvio(false)
   };
 
   const verDetalleProductoApp = (id) => {
@@ -46,14 +47,15 @@ const App = () => {
   }, [busqueda, item]);
 
 
-  const prodEnvioGratis = [...productos.filter(producto => producto.shipping === true)]
+  const prodEnvioGratis = [...productos.filter(producto => producto.shipping.free_shipping === true)]
   console.log(prodEnvioGratis)
 
-  
+
+
+
   const verEnvioGratis = () => {
-   setVerEnvioGratis(true)
-   setProductos([])
-   
+   setVerEnvio(true)
+   setProductos(prodEnvioGratis)
   }
 
 
@@ -145,6 +147,7 @@ const App = () => {
       </div>
     </div>
   );
-};
+              }
+
 
 export default App;
