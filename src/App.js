@@ -18,16 +18,15 @@ const App = () => {
   const [detalle, setDetalle] = useState(false);
   const [verEnvio, setVerEnvio] = useState(false);
   // const [verTiendas, setVerTiendas] = useState(false);
-  // const [producto, setProducto] = useState({})
-   const [valueCheck, setValueCheck] = useState(false);
-   const [checkInbox, setCheckInbox] = useState(false);
-  
+  const [producto, setProducto] = useState({});
+  const [description, setDescription] = useState("");
 
-  
-  const handleCheckbox = (e) => { 
-    setCheckInbox(e.target.value)
-    console.log(checkInbox, valueCheck)
-  }
+  const [valorEnvio, setValorEnvio] = useState(false);
+
+  const handleCheckbox = (e) => {
+    setValorEnvio(e.target.checked);
+    valorEnvio ? setVerEnvio(false) : setVerEnvio(true);
+  };
 
   const handleChange = (e) => {
     setValue(e.target.value);
@@ -38,9 +37,6 @@ const App = () => {
     setBusqueda(value);
     setDetalle(false);
     setRuta("sites/MLA/search?q=");
-    setVerEnvio(false);
-    setCheckInbox(true)
-
   };
 
   const verDetalleProductoApp = (id) => {
@@ -49,42 +45,39 @@ const App = () => {
     setRuta("items/");
     setDetalle(true);
     setVerEnvio(false);
-    setProductos(productos);
+    // setProductos(productos);
   };
 
   useEffect(() => {
     fetch(`https://api.mercadolibre.com/${rutaInicial}${busqueda}`)
       .then((res) => res.json())
       .then((data) => {
-        setProductos(data.results);
-        console.log(data.results)
-        // setProdUnico(data);
+        verEnvio
+          ? setProductos([
+              ...productos.filter(
+                (producto) => producto.shipping.free_shipping === true
+              ),
+            ])
+          : setProductos(data.results);
+        detalle && setProducto(data);
+        console.log(producto);
       });
-  }, [busqueda, item]);
+  }, [busqueda, item, valorEnvio]);
 
-  // const copiaProductos = [...productos]
+  
+  useEffect(() => {
+    fetch(`https://api.mercadolibre.com/${rutaInicial}${busqueda}/description`)
+      .then((res) => res.json())
+      .then((data) => {
+        setDescription(data.plain_text);
+      });
+  }, [detalle]);
 
-  const verEnvioGratis = () => {
-    setVerEnvio(true);
-    setProductos([
-      ...productos.filter(
-        (producto) => producto.shipping.free_shipping === true
-      ),
-    ]);
-  };
 
-  // const verTiendasOficiales = () => {
-  //   setVerTiendas(true);
+
   //   setProductos([
   //     ...productos.filter(
   //       (producto) => producto.official_store_id !== 0
-  //     )
-  //   ]);
-  // };
-
-  // let valor = (false)
-
-
 
   return (
     <div>
@@ -101,7 +94,6 @@ const App = () => {
                 type="text"
                 placeholder="Buscá lo que querés, encontrá más de lo que imaginás"
                 onChange={handleChange}
-                value={value}
               ></input>
               <input
                 className="submit"
@@ -118,6 +110,27 @@ const App = () => {
         </div>
 
         <div className="main">
+
+        {detalle && (
+              <div className="contenedor-vista-detalle">
+                <div className="volver">
+                  <FontAwesomeIcon className="help" icon={faArrowCircleLeft} />
+                  <button onClick={handleClick}>VOLVER</button>{" "}
+                </div>
+                <TarjetaUnica
+                  titulo={producto.title}
+                  precio={producto.price}
+                  estado={producto.condition}
+                  foto={producto.thumbnail}
+                  // vendidos={producto.condition}
+                  descripcion={description}
+                  key={producto.id}
+                  id={producto.id}
+               
+                />
+              </div>
+            )}
+
           {/* <h3>Resultados</h3> */}
           {!detalle && (
             <div className="contenedor-filtros">
@@ -126,24 +139,28 @@ const App = () => {
                 <h5>Envío Gratis</h5>
                 <input
                   type="checkbox"
-                  onClick={verEnvioGratis}
+                  // onClick={verEnvioGratis}
+                  checked={valorEnvio}
                   onChange={handleCheckbox}
                   className="check-envio"
-                  value={valueCheck}
+                  // value={valueCheck}
                 ></input>
                 <h5>Ordenar por mayor valor</h5>
                 <input type="checkbox"></input>
                 <h5>Ordenar por menor valor</h5>
                 <input type="checkbox"></input>
                 <h5>Por Localidad</h5>
-                <select><option>a</option><option>b</option></select>
+                <select>
+                  <option>a</option>
+                  <option>b</option>
+                </select>
                 <h5>Tiendas Oficiales</h5>
-                <input type="checkbox" ></input>
+                <input type="checkbox"></input>
               </div>
             </div>
           )}
-          <div className="resultados">
 
+          <div className="resultados">
             {productos &&
               productos.map((producto) => (
                 <Tarjeta
@@ -157,15 +174,7 @@ const App = () => {
                 />
               ))}
 
-
-            {detalle && 
-              <div className="contenedor-vista-detalle">
-                <div className="volver"> <FontAwesomeIcon className="help" icon={faArrowCircleLeft} />
-                <button onClick={handleClick}>VOLVER</button> </div>
-                <div className="tarjeta-detalle">DETALLE DE LA TARJETA</div>
-                
-              </div>
-          }
+      
 
             {verEnvio &&
               productos.map((producto) => (
@@ -180,7 +189,7 @@ const App = () => {
                 />
               ))}
 
-                   {/* {verTiendas &&
+            {/* {verTiendas &&
               productos.map((producto) => (
                 <Tarjeta
                   key={producto.id}
@@ -192,8 +201,6 @@ const App = () => {
                   ver={verDetalleProductoApp}
                 />
               ))} */}
-
-
           </div>
         </div>
 
