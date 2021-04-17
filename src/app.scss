@@ -186,6 +186,22 @@ body {
   }
 }
 
+.contenedor-vista-detalle {
+  display: flex;
+
+.tarjeta-detalle {
+  margin-left: 90px;
+  width: 900px;
+  height: 600px;
+  background-color: rgb(179, 179, 179);
+}
+
+.volver {
+  width: 200px;
+  height: 100px;
+}
+}
+
 .footer {
   display: flex;
   justify-content: space-around;
