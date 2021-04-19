@@ -17,12 +17,11 @@ const App = () => {
   const [rutaInicial, setRuta] = useState("sites/MLA/search?q=");
   const [detalle, setDetalle] = useState(false);
   const [verEnvio, setVerEnvio] = useState(false);
-  // const [verTiendas, setVerTiendas] = useState(false);
   const [producto, setProducto] = useState({});
   const [description, setDescription] = useState("");
-  const [imagenDetalle, setImagenDetalle] = useState("");
-
   const [valorEnvio, setValorEnvio] = useState(false);
+
+    const [verTiendas, setVerTiendas] = useState(false);
 
 
   const handleCheckbox = (e) => {
@@ -54,7 +53,7 @@ const App = () => {
     fetch(`https://api.mercadolibre.com/${rutaInicial}${busqueda}`)
       .then((res) => res.json())
       .then((data) => {
-        setImagenDetalle(data.pictures);
+        // setImagenDetalle(data.pictures);
         verEnvio
           ? setProductos([
               ...productos.filter(
@@ -76,16 +75,6 @@ const App = () => {
        
       });
   }, [detalle]);
-
-  // useEffect(() => {
-  //   fetch(`https://api.mercadolibre.com/${rutaInicial}${busqueda}`)
-  //     .then((res) => res.json())
-  //     .then((data) => {
-  //       setImagenDetalle(data.pictures);
-
-  //     });
-  // }, [detalle]);
-
 
 
   //   setProductos([
@@ -134,7 +123,7 @@ const App = () => {
                   titulo={producto.title}
                   precio={producto.price}
                   estado={producto.condition}
-                  foto={imagenDetalle}
+                  foto={producto.pictures}
                   // vendidos={producto.condition}
                   descripcion={description}
                   key={producto.id}

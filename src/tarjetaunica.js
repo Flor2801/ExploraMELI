@@ -2,14 +2,14 @@ import "./app.scss";
 
 const TarjetaUnica = ({ titulo, precio, estado, foto, descripcion, id }) => {
   const nuevo = estado;
-  const fotoDetalle = foto.secure_url
+  const foto2 = foto[0].secure_url;
 
 
   return (
     <div>
       <div className="contenedor-detalle">
         <div className="detalle-foto">
-          <img className="foto" src={fotoDetalle}></img>
+          <img className="foto" src={foto2}></img>
         </div>
         <div className="detalle-texto">
           <p>{titulo}</p>
