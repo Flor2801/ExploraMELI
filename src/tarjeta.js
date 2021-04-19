@@ -19,7 +19,6 @@ const Tarjeta = ({ id, precio, titulo, foto, envio, ver }) => {
         <div className="envio-producto">
           {envioGratis && (
             <FontAwesomeIcon className="camioncito" icon={faTruck} />
-            
           )}
         </div>
         <div className="precio-producto">

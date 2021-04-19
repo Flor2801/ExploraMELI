@@ -20,8 +20,10 @@ const App = () => {
   // const [verTiendas, setVerTiendas] = useState(false);
   const [producto, setProducto] = useState({});
   const [description, setDescription] = useState("");
+  const [imagenDetalle, setImagenDetalle] = useState("");
 
   const [valorEnvio, setValorEnvio] = useState(false);
+
 
   const handleCheckbox = (e) => {
     setValorEnvio(e.target.checked);
@@ -52,6 +54,7 @@ const App = () => {
     fetch(`https://api.mercadolibre.com/${rutaInicial}${busqueda}`)
       .then((res) => res.json())
       .then((data) => {
+        setImagenDetalle(data.pictures);
         verEnvio
           ? setProductos([
               ...productos.filter(
@@ -60,9 +63,9 @@ const App = () => {
             ])
           : setProductos(data.results);
         detalle && setProducto(data);
-        console.log(producto);
+       
       });
-  }, [busqueda, item, valorEnvio]);
+  }, [busqueda, item, valorEnvio, detalle]);
 
   
   useEffect(() => {
@@ -70,8 +73,18 @@ const App = () => {
       .then((res) => res.json())
       .then((data) => {
         setDescription(data.plain_text);
+       
       });
   }, [detalle]);
+
+  // useEffect(() => {
+  //   fetch(`https://api.mercadolibre.com/${rutaInicial}${busqueda}`)
+  //     .then((res) => res.json())
+  //     .then((data) => {
+  //       setImagenDetalle(data.pictures);
+
+  //     });
+  // }, [detalle]);
 
 
 
@@ -121,7 +134,7 @@ const App = () => {
                   titulo={producto.title}
                   precio={producto.price}
                   estado={producto.condition}
-                  foto={producto.thumbnail}
+                  foto={imagenDetalle}
                   // vendidos={producto.condition}
                   descripcion={description}
                   key={producto.id}
