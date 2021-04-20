@@ -2,7 +2,7 @@ import "./app.scss";
 
 const TarjetaUnica = ({ titulo, precio, estado, foto, descripcion, id }) => {
   const nuevo = estado;
-  const foto2 = foto[0].secure_url;
+  const foto2 = foto && foto.length && foto[0].secure_url;
 
 
   return (

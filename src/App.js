@@ -17,12 +17,18 @@ const App = () => {
   const [rutaInicial, setRuta] = useState("sites/MLA/search?q=");
   const [detalle, setDetalle] = useState(false);
   const [verEnvio, setVerEnvio] = useState(false);
+
   const [producto, setProducto] = useState({});
   const [description, setDescription] = useState("");
   const [valorEnvio, setValorEnvio] = useState(false);
 
-    const [verTiendas, setVerTiendas] = useState(false);
+  const [valorTiendas, setValorTiendas] = useState(false);
+  const [verTiendas, setVerTiendas] = useState(false);
 
+  const handleCheckTiendas = (e) => {
+    setValorTiendas(e.target.checked);
+    valorTiendas ? setVerTiendas(false) : setVerTiendas(true);
+  };
 
   const handleCheckbox = (e) => {
     setValorEnvio(e.target.checked);
@@ -61,21 +67,25 @@ const App = () => {
               ),
             ])
           : setProductos(data.results);
-        detalle && setProducto(data);
-       
-      });
-  }, [busqueda, item, valorEnvio, detalle]);
+        verTiendas
+          ? setProductos([
+              ...productos.filter(
+                (producto) => producto.official_store_id !== null
+              ),
+            ])
+          : setProductos(data.results);
 
-  
+        detalle && setProducto(data);
+      });
+  }, [busqueda, item, detalle, valorEnvio, valorTiendas]);
+
   useEffect(() => {
     fetch(`https://api.mercadolibre.com/${rutaInicial}${busqueda}/description`)
       .then((res) => res.json())
       .then((data) => {
         setDescription(data.plain_text);
-       
       });
   }, [detalle]);
-
 
   //   setProductos([
   //     ...productos.filter(
@@ -112,26 +122,24 @@ const App = () => {
         </div>
 
         <div className="main">
-
-        {detalle && (
-              <div className="contenedor-vista-detalle">
-                <div className="volver">
-                  <FontAwesomeIcon className="help" icon={faArrowCircleLeft} />
-                  <button onClick={handleClick}>VOLVER</button>{" "}
-                </div>
-                <TarjetaUnica
-                  titulo={producto.title}
-                  precio={producto.price}
-                  estado={producto.condition}
-                  foto={producto.pictures}
-                  // vendidos={producto.condition}
-                  descripcion={description}
-                  key={producto.id}
-                  id={producto.id}
-               
-                />
+          {detalle && (
+            <div className="contenedor-vista-detalle">
+              <div className="volver">
+                <FontAwesomeIcon className="help" icon={faArrowCircleLeft} />
+                <button onClick={handleClick}>VOLVER</button>{" "}
               </div>
-            )}
+              <TarjetaUnica
+                titulo={producto.title}
+                precio={producto.price}
+                estado={producto.condition}
+                foto={producto.pictures}
+                // vendidos={producto.condition}
+                descripcion={description}
+                key={producto.id}
+                id={producto.id}
+              />
+            </div>
+          )}
 
           {/* <h3>Resultados</h3> */}
           {!detalle && (
@@ -141,11 +149,16 @@ const App = () => {
                 <h5>Envío Gratis</h5>
                 <input
                   type="checkbox"
-                  // onClick={verEnvioGratis}
                   checked={valorEnvio}
                   onChange={handleCheckbox}
                   className="check-envio"
-                  // value={valueCheck}
+                ></input>
+                <h5>Tiendas Oficiales</h5>
+                <input
+                  type="checkbox"
+                  checked={valorTiendas}
+                  onChange={handleCheckTiendas}
+                  className="check-tiendas"
                 ></input>
                 <h5>Ordenar por mayor valor</h5>
                 <input type="checkbox"></input>
@@ -156,8 +169,6 @@ const App = () => {
                   <option>a</option>
                   <option>b</option>
                 </select>
-                <h5>Tiendas Oficiales</h5>
-                <input type="checkbox"></input>
               </div>
             </div>
           )}
@@ -176,9 +187,7 @@ const App = () => {
                 />
               ))}
 
-      
-
-            {verEnvio &&
+            {(verEnvio || verTiendas) &&
               productos.map((producto) => (
                 <Tarjeta
                   key={producto.id}
@@ -190,19 +199,6 @@ const App = () => {
                   ver={verDetalleProductoApp}
                 />
               ))}
-
-            {/* {verTiendas &&
-              productos.map((producto) => (
-                <Tarjeta
-                  key={producto.id}
-                  id={producto.id}
-                  precio={producto.price}
-                  titulo={producto.title}
-                  foto={producto.thumbnail}
-                  envio={producto.shipping}
-                  ver={verDetalleProductoApp}
-                />
-              ))} */}
           </div>
         </div>
 
