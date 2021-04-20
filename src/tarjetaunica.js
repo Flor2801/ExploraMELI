@@ -1,9 +1,8 @@
 import "./app.scss";
 
-const TarjetaUnica = ({ titulo, precio, estado, foto, descripcion, id }) => {
+const TarjetaUnica = ({ titulo, precio, estado, foto, descripcion, id , link}) => {
   const nuevo = estado;
   const foto2 = foto && foto.length && foto[0].secure_url;
-
 
   return (
     <div>
@@ -18,11 +17,10 @@ const TarjetaUnica = ({ titulo, precio, estado, foto, descripcion, id }) => {
           <p>{descripcion}</p>
           {/* <link href={`https://api.mercadolibre.com/${titulo}/p${id}`} >Comprar</link> */}
         </div>
+      <link href={link}>COMPRAR</link>
       </div>
     </div>
   );
 };
 
 export default TarjetaUnica;
-
-

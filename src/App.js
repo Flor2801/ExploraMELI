@@ -59,23 +59,26 @@ const App = () => {
     fetch(`https://api.mercadolibre.com/${rutaInicial}${busqueda}`)
       .then((res) => res.json())
       .then((data) => {
-        // setImagenDetalle(data.pictures);
-        verEnvio
-          ? setProductos([
+
+       (!verEnvio && !verTiendas) && setProductos(data.results);
+
+       
+       verEnvio && setProductos([
               ...productos.filter(
                 (producto) => producto.shipping.free_shipping === true
               ),
             ])
-          : setProductos(data.results);
-        verTiendas
-          ? setProductos([
+      
+        verTiendas &&
+          setProductos([
               ...productos.filter(
                 (producto) => producto.official_store_id !== null
               ),
             ])
-          : setProductos(data.results);
+
 
         detalle && setProducto(data);
+  
       });
   }, [busqueda, item, detalle, valorEnvio, valorTiendas]);
 
@@ -137,6 +140,7 @@ const App = () => {
                 descripcion={description}
                 key={producto.id}
                 id={producto.id}
+                link={producto.permalink}
               />
             </div>
           )}
