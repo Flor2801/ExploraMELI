@@ -48,6 +48,7 @@ const App = () => {
 
   const verDetalleProductoApp = (id) => {
     setItem(id);
+    
     setBusqueda(id);
     setRuta("items/");
     setDetalle(true);

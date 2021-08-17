@@ -17,7 +17,7 @@ const TarjetaUnica = ({ titulo, precio, estado, foto, descripcion, id , link}) =
           <p>{descripcion}</p>
           {/* <link href={`https://api.mercadolibre.com/${titulo}/p${id}`} >Comprar</link> */}
         </div>
-      <link href={link}>COMPRAR</link>
+      {/* <link href={link}>COMPRAR</link> */}
       </div>
     </div>
   );
